@@ -4,4 +4,6 @@ qrcode[pil]==7.4.2
 Pillow==10.1.0
 firebase-admin==6.4.0
 requests==2.31.0
+gunicorn==21.2.0
+
 
