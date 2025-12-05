@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste Juction</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="user-auth.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/maal.html" style="text-decoration: none; color: inherit;">
+                    <h1>Taste Juction</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="headerSearchInput" placeholder="Search products..."
+                    onkeypress="if(event.key === 'Enter') window.location.href='/maal.html?search=' + encodeURIComponent(this.value)">
+                <button type="button"
+                    onclick="window.location.href='/maal.html?search=' + encodeURIComponent(document.getElementById('headerSearchInput').value)"
+                    title="Search">🔍</button>
+            </div>
+            <div class="header-right">
+                <a href="/maal.html" class="nav-link">🏠 Home</a>
+                <a href="/maal.html" class="nav-link">🛍️ Food Iteams</a>
+                <button class="cart-icon" onclick="window.location.href='/cart.html'" title="View Cart">
+                    🛒
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
+                <span id="userInfo" style="display: none;"></span>
+                <button id="logoutBtn" onclick="userLogout()" style="display: none;" class="logout-btn">Logout</button>
+                <a href="login.html" id="loginLink" class="admin-link" title="Login">🔑 Login</a>
+                <a href="login.html?tab=register" id="signupLink" class="admin-link" title="Sign Up">📝 Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="hero hero--sub">
+            <div class="hero-text">
+                <p class="page-eyebrow">Your bag</p>
+                <h1>ORDER BAG</h1>
+                <p class="page-subtitle">Review your picks, adjust quantities, and head to checkout when you're ready.
+                </p>
+            </div>
+            <div class="hero-actions">
+                <a href="maal.html" class="secondary-btn">Continue ordering</a>
+            </div>
+        </section>
+
+        <div class="cart-page-container">
+            <!-- Cart Items Section -->
+            <div class="cart-items-section surface-card">
+                <div class="cart-section-title">Items in Your Cart</div>
+                <div id="cartItemsContainer"></div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-summary-section">
+                <div class="surface-card cart-summary-card">
+                    <h2 class="summary-title">Order Summary</h2>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span class="summary-value" id="cartSubtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span class="summary-value">Free</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total:</span>
+                        <span class="summary-value" id="cartTotal">₹0.00</span>
+                    </div>
+                    <button class="checkout-btn-large" id="checkoutBtn" onclick="proceedToCheckout()" disabled>
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&reg; 2025 TASTE JUNCTION. All rights reserved.</p>
+            <div class="footer-contact">
+                <p>📞 Contact Us: 6280207979 | 9463600382</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart.js"></script>
+</body>
+
+</html>

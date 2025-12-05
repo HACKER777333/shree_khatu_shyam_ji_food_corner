@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "taste-juction-food-delivery",
+  "private_key_id": "eb8b72d36a640aea14dc9b0658470520dac42ede",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCq1dZgo1R0o0Em\n4oLE6IrP8eoFpd19OmwHi7POcshLS0j/D5yxM5E8IwlJTZFDtoZOMOPaufegFJKy\ns4ivt8CU3wkeQAqEmkapxTpiEU0AvHeD/c2TkQVCI+YTpsYLrWPzfJhjSFh9IBVx\nZhJ8iNDBGigJTNkTrIPMSb8avrD8dEIHCf1W/fH1Gk5wy2PQJiZ1EtY1YvOInUkh\nJNE/4m0dVa9yirJ3xczFc6LbaAj54S/1Bwe/KlWhn2D03I1/4a2Rc6v7A1kVmdhV\nHwQKdUu2L4V7LLzsx/5Ex53gCyqZ5Ao9ntmW3IEPrymWoGfq6uEcE8ZBmEpxjB6h\nWLlVfO/PAgMBAAECggEAB1PStSRsS/Bwq/VNPJro0VCEBCgAHw3xckVoufMsaiZZ\nhC8sPmGC2jx6en1sPKZIjnQEYe5WE7SuMiIHO9o61WfXoUeH6/YeD8wY2/n3/o8W\n5T9uoOS4gATAKpmdpwSR4/C1LJT+zqcgpFOHeXX41j+D9hoouXJN2OZU3xXMy5cz\nCBS/hYNVYTwzhUyZ8fg8YKQliAOXVgtN7rg7uDyVpzd1x5rldds7fl+JaR6ohJxQ\nEbPMJ0VoZE8SLA7bzEo3QqHgH+OeQ44vOeGmFrU6tITCjfhc+fyycAvIi6y1fIYB\nGldt5V7VJhJ6L6jwm06V8ayXT9hOUdoSTeLP4K59mQKBgQDVzJH4cYXzeLblz1Wh\nBPtWxjqMHftrW0Ckf/8AsV1ICXm4JcVyZ8OUMCGuP/f01xOeCBDVLZ1thBsVceJj\nzj2ft7a1TEKATeDsYaMSXWaxlz8UdN9tVHRljoCCGzwtDiHZubULcTSfAxTeUlFg\nAmjgGvOPqndGSlB1f4+JOS7yIwKBgQDMjkYmBbiSsoXDvzqiOrZkI7tnfh8B+NjG\nUs/NyCPkKYYWKr1SNUjcLq462qJ5SoZ5D9qdwKyJ+VHMRiOc+dvUlLGxZjF8yGj7\nPrhToryxF/m5XAHRbhl0Ze7l53u8rq9fM/7pfI/iVMPMe9m1GjcHoP9WhDiWq/qH\n5R9Fd514ZQKBgQDJWoLXM0Nui+/k+6Gvplt32/Vj5RDWiPiWdJ2a72/k2leyYJBW\nMPd3ZuUxkLlb8/tbyEjiHLW5YMOJLNqEGMbc107R7GJtJ+t/dGz6bNC8zK7x+yg5\ndWKyCsVow3GnFTo4LbgecJ2YbHSI9YoCHALdnURpt6fhoTepkVuDZ0GZdQKBgFtC\n8osOLF3Oph1CGO++EBe3VWoD++OOWXCKC8o8i77Ew9zp7pNZ0IrjjLoXRzukA0DJ\n0PhmuNPJ1zOy6zqiwvAh8vE5rcSFSUkmn2g5B8Re9Pw8z1bXryWeQKpzz2HL8dQg\nx472Et+gf8agTu4cpwaRTroTvYeDbP/qOjxs9GV9AoGBAKSa8DrlFnSV0lBAK+mP\nXy3jdCxj/+yEcBzcXXe32DzJ1Y79uI0Y/eci5EwkBvLmGWbksZ3QufJw0oSBHzQQ\nn0ghtbo3KYeaQ01uXR+XEEU9ty0AvpKwevXpf86g8eh+3qD9HHpVQBvxdqzNuuWv\nIsHqEBzHuzjc9eFXCU28Pxk0\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@taste-juction-food-delivery.iam.gserviceaccount.com",
+  "client_id": "114789949774662631952",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40taste-juction-food-delivery.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

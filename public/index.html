@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASTE JUNCTION - ONLINE DELIVERY</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="user-auth.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/home" style="text-decoration: none; color: inherit;">
+                    <h1>Taste Junction</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="headerSearchInput" placeholder="Search products..."
+                    onkeypress="if(event.key === 'Enter') { window.location.href='/maal.html?search=' + encodeURIComponent(this.value); }">
+                <button type="button"
+                    onclick="window.location.href='/maal.html?search=' + encodeURIComponent(document.getElementById('headerSearchInput').value)"
+                    title="Search">🔍</button>
+            </div>
+            <div class="header-right">
+
+                <a href="/maal.html" class="nav-link">🛍️ Food Iteams</a>
+                <button class="cart-icon" onclick="window.location.href='/cart.html'" title="View Cart">
+                    🛒
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
+                <span id="userInfo" style="display: none;"></span>
+                <button id="logoutBtn" onclick="userLogout()" style="display: none;" class="logout-btn">Logout</button>
+                <a href="login.html" id="loginLink" class="admin-link" title="Login">🔑 Login</a>
+                <a href="login.html?tab=register" id="signupLink" class="admin-link" title="Sign Up">📝 Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Welcome to TASTE JUNCTION</h1>
+                <p class="subtitle">
+                    BEST FOOD AT YOUR DOORSTEP WITHOUT LEAVING YOUR HOME
+                </p>
+            </div>
+        </section>
+
+        <!-- Quick Navigation -->
+        <section class="quick-nav">
+            <div class="nav-card" onclick="window.location.href='order-tracking.html'">
+                <div class="nav-icon">📦</div>
+                <h3>Track Your Order</h3>
+                <p>Check your order status anytime</p>
+            </div>
+            <div class="nav-card" onclick="window.location.href='/maal.html'">
+                <div class="nav-icon">🛍️</div>
+                <h3>All Food Items</h3>
+                <p>Explore Best Food Items Here</p>
+            </div>
+
+            <div class="nav-card" onclick="window.location.href='cart.html'">
+                <div class="nav-icon">🛒</div>
+                <h3>My Bag</h3>
+                <p>View your Bag</p>
+            </div>
+
+            <div class="nav-card" onclick="window.location.href='feedback.html'">
+                <div class="nav-icon">📝</div>
+                <h3>Feedback</h3>
+                <p>Share your thoughts with us</p>
+            </div>
+        </section>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar" id="cartSidebar">
+            <div class="cart-header">
+                <h2>My Bag</h2>
+                <button class="close-cart" onclick="hideCart()">×</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <p class="empty-cart">Your bag is empty</p>
+            </div>
+            <div class="cart-inline-action" id="cartInlineAction" style="display: none;">
+                <button class="checkout-btn inline" type="button" onclick="showCheckout()">Proceed to
+                    Checkout</button>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: ₹<span id="cartTotal">0.00</span></strong>
+                </div>
+                <button class="checkout-btn" type="button" onclick="showCheckout()" id="checkoutBtn" disabled>Proceed to
+                    Checkout</button>
+            </div>
+        </div>
+        <div class="cart-overlay" id="cartOverlay" onclick="hideCart()"></div>
+
+        <!-- Checkout Modal -->
+        <div class="checkout-modal" id="checkoutModal">
+            <div class="checkout-content">
+                <div class="checkout-header">
+                    <h2>Checkout</h2>
+                    <button class="close-checkout" onclick="hideCheckout()">×</button>
+                </div>
+                <form id="checkoutForm" onsubmit="placeOrder(event)">
+                    <div class="form-section">
+                        <h3>Customer Information</h3>
+                        <input type="text" placeholder="Full Name" required id="customerName">
+                        <input type="email" placeholder="Email Address" required id="customerEmail">
+                        <input type="tel" placeholder="Phone Number" required id="customerPhone">
+                    </div>
+                    <div class="form-section">
+                        <h3>Shipping Address</h3>
+                        <input type="text" placeholder="Street Address" required id="shippingAddress">
+                        <div class="form-row">
+                            <input type="text" placeholder="City" required id="city">
+                            <input type="text" placeholder="State" required id="state">
+                            <input type="text" placeholder="ZIP Code" required id="zipCode">
+                        </div>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="orderSummary"></div>
+                        <div class="order-total">
+                            <strong>Total: ₹<span id="orderTotal">0.00</span></strong>
+                        </div>
+                    </div>
+
+                    <!-- Payment Section -->
+                    <div class="payment-section" id="paymentSection">
+                        <h3>Payment</h3>
+                        <div class="payment-info">
+                            <p class="payment-amount">Amount to Pay: <strong>₹<span
+                                        id="paymentAmount">0.00</span></strong>
+                            </p>
+                            <p class="upi-id">UPI ID: <strong>priyankjain2047@fam</strong></p>
+                        </div>
+                        <div class="qr-code-container" id="qrCodeContainer">
+                            <p>Loading QR Code...</p>
+                        </div>
+                        <button type="button" class="payment-app-btn" onclick="openPaymentApp()">
+                            💸 Pay with UPI App
+                        </button>
+                        <div class="payment-instructions">
+                            <p>📱 Scan the QR code with your UPI app to make payment</p>
+                            <p>Or send money directly to: <strong>priyankjain2047@fam</strong></p>
+                        </div>
+                        <div class="payment-warning"
+                            style="background: rgba(255, 193, 7, 0.15); border: 2px solid #ffc107; border-radius: 12px; padding: 15px; margin: 20px 0; text-align: center;">
+                            <p
+                                style="color: #ffc107; font-weight: bold; font-size: 16px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                ⚠️ <span>IMPORTANT WARNING</span>
+                            </p>
+                            <p style="color: #fff; margin: 10px 0 0 0; font-size: 14px; line-height: 1.5;">
+                                <strong>If you place an order without making the payment, your order will be
+                                    automatically CANCELLED.</strong><br>
+                                Please ensure you have completed the payment before clicking "I Have Paid"
+                                and placing
+                                the order.
+                            </p>
+                        </div>
+                        <button type="button" class="payment-confirmed-btn" id="paymentConfirmedBtn"
+                            onclick="confirmPayment()">
+                            ✓ I Have Paid
+                        </button>
+                    </div>
+
+                    <button type="submit" class="place-order-btn" id="placeOrderBtn" disabled
+                        style="display: none;">Place
+                        Order</button>
+                </form>
+            </div>
+        </div>
+        <div class="checkout-overlay" id="checkoutOverlay" onclick="hideCheckout()"></div>
+
+        <!-- Loading Modal -->
+        <div class="loading-modal" id="loadingModal">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h2>Processing Your Order...</h2>
+                <p class="loading-status">Your order is being sent to our team</p>
+                <p class="loading-warning">
+                    Make sure you have completed the payment — unpaid orders will be cancelled.
+                </p>
+                <p class="loading-subtext">Please wait, this may take a few seconds.</p>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="success-modal" id="successModal">
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <h2>Order Placed Successfully!</h2>
+                <p>Your order has been confirmed. You will receive an email confirmation shortly.</p>
+                <p class="order-number">Order #<span id="orderNumber"></span></p>
+                <div class="success-actions">
+                    <a href="order-tracking.html" id="trackOrderLink" class="btn-track-order">📦 Track Your
+                        Order</a>
+                    <button onclick="closeSuccessModal()">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Preview Modal -->
+        <div class="product-preview-overlay" id="productPreviewOverlay"></div>
+        <div class="product-preview-modal" id="productPreviewModal">
+            <div class="product-preview-content">
+                <button class="preview-close" id="productPreviewClose" aria-label="Close preview">×</button>
+                <div class="product-preview-body">
+                    <div class="preview-gallery">
+                        <button class="preview-nav" id="productPreviewPrev" aria-label="Previous image">‹</button>
+                        <img id="productPreviewImage" src="https://via.placeholder.com/600" alt="Product preview">
+                        <button class="preview-nav" id="productPreviewNext" aria-label="Next image">›</button>
+                        <div class="preview-position" id="productPreviewPosition">1/1</div>
+                    </div>
+                    <div class="preview-info">
+                        <h2 id="productPreviewName">Product Name</h2>
+                        <p class="preview-price" id="productPreviewPrice">₹0.00</p>
+                        <p class="preview-meta" id="productPreviewMeta">0 ★ • 0 reviews</p>
+                        <p class="preview-description" id="productPreviewDescription">Description</p>
+                        <button class="add-to-cart-btn" id="productPreviewAddBtn">Add to Bag</button>
+                    </div>
+                </div>
+                <div class="preview-thumbnails" id="productPreviewThumbnails"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

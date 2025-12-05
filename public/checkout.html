@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - TASTE JUNCTION</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase Client SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="user-auth.js"></script>
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="maal.html" style="text-decoration: none; color: inherit;">
+                    <h1>TASTE JUNCTION</h1>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="maal.html" class="nav-link">🏠 Home</a>
+                <a href="cart.html" class="nav-link">🛒 Bag</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero hero--sub">
+            <div class="hero-text">
+                <p class="page-eyebrow">Step 1</p>
+                <h1>Shipping Information</h1>
+                <p class="page-subtitle">Enter your delivery details to proceed.</p>
+            </div>
+        </section>
+
+        <div class="checkout-container">
+            <!-- Left Column: Form -->
+            <div class="checkout-card surface-card">
+                <h2>Shipping Details</h2>
+                <form id="checkoutForm" class="form-card">
+                    <div class="form-row">
+                        <div>
+                            <label for="customerName">Full Name</label>
+                            <input type="text" id="customerName" required>
+                        </div>
+                        <div>
+                            <label for="customerEmail">Email Address</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 16px;">
+                        <label for="customerPhone">Phone Number</label>
+                        <input type="tel" id="customerPhone" required>
+                    </div>
+
+                    <!-- Map Address Section -->
+                    <div id="mapAddressSection" style="margin-top: 24px;">
+                        <label>Select Delivery Location</label>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Please select your exact location
+                            on the map for accurate shipping calculation.</p>
+
+                        <div style="margin-bottom: 10px;">
+                            <button type="button" id="useLocationBtn" class="secondary-btn small-btn"
+                                title="Use Current Location" style="width: 100%;">
+                                📍 Use Current Location
+                            </button>
+                        </div>
+
+                        <!-- Map Container -->
+                        <div id="mapContainer"
+                            style="height: 300px; width: 100%; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                            <div id="map" style="height: 100%; width: 100%; border-radius: 8px;"></div>
+                        </div>
+
+                        <button type="button" id="confirmLocationBtn" class="primary-btn"
+                            style="width: 100%; margin-bottom: 10px; display: none;">Confirm This Location</button>
+
+                        <div id="locationResult"
+                            style="padding: 10px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 4px; display: none;">
+                            <p style="margin: 0; font-size: 14px; color: #2e7d32;"><strong>Location Selected!</strong>
+                            </p>
+                            <p id="locationLinkDisplay"
+                                style="margin: 5px 0 0; font-size: 12px; word-break: break-all; color: #1565c0;"></p>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Fields -->
+                    <input type="hidden" id="latitude">
+                    <input type="hidden" id="longitude">
+                    <input type="hidden" id="googleMapsLink">
+                    <input type="hidden" id="addressMode" value="map">
+                    <input type="hidden" id="shippingAddress">
+
+                    <div class="form-row" style="margin-top: 16px;">
+                        <div>
+                            <label for="city">City</label>
+                            <input type="text" id="city" placeholder="Auto-filled or Enter City">
+                        </div>
+                        <div>
+                            <label for="state">State</label>
+                            <input type="text" id="state" placeholder="Auto-filled or Enter State">
+                        </div>
+                        <div>
+                            <label for="zipCode">ZIP / Postal Code</label>
+                            <input type="text" id="zipCode" placeholder="Auto-filled or Enter ZIP">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="checkout-summary">
+                <div class="checkout-card surface-card">
+                    <h2>Order Summary</h2>
+                    <div id="checkoutItems" class="summary-items">
+                        <!-- Items will be populated by JS -->
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="coupon-section"
+                        style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 14px;">Have a Coupon Code?</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <input type="text" id="couponCode" placeholder="Enter coupon code"
+                                style="flex: 1; min-width: 150px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; text-transform: uppercase;">
+                            <button onclick="applyCoupon()" id="applyCouponBtn" class="primary-btn"
+                                style="padding: 10px 20px; white-space: nowrap;">Apply</button>
+                        </div>
+                        <div id="couponMessage" style="margin-top: 10px; font-size: 13px;"></div>
+                    </div>
+
+                    <div class="summary-totals">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <div id="checkoutSubtotal">₹0.00</div>
+                        </div>
+                        <div class="summary-row" id="discountRow" style="display: none; color: #2e7d32;">
+                            <span>Discount</span>
+                            <div id="checkoutDiscount">-₹0.00</div>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <div id="checkoutShipping">Calculated at Map Selection</div>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <div id="checkoutTotal">₹0.00</div>
+                        </div>
+
+                        <div id="checkoutSummaryDetails" style="display:none;"></div>
+                        <div id="emptyCheckoutState" style="display:none; text-align:center; padding:20px;">
+                            <p>Your bag is empty</p>
+                            <a href="cart.html" class="secondary-btn">Return to Shop</a>
+                        </div>
+                        <div class="checkout-actions">
+                            <a href="cart.html" class="secondary-btn">← Back to Bag</a>
+                            <button type="submit" form="checkoutForm" class="primary-btn"
+                                id="continueToPaymentBtn">Continue to Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&reg; 2025 TASTE JUNCTION. All rights reserved.</p>
+            <div class="footer-contact">
+                <p>📞 Contact Us: 6280207979 | 9463600382</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="checkout.js"></script>
+</body>
+
+</html>

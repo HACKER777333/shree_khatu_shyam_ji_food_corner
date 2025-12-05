@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Taste Juction</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login-styles.css">
+</head>
+
+<body class="auth-page">
+    <header class="header">
+        <section class="hero hero--sub hero-auth">
+            <div class="hero-text">
+                <p class="page-eyebrow">Account access</p>
+                <h1>Sign in to order on TASTE JUNCTION</h1>
+                <p class="page-subtitle">Stay logged in to sync bags, reuse saved addresses, and unlock delivery
+                    updates without missing a beat.</p>
+            </div>
+            <div class="hero-actions">
+                <span class="hero-pill">Secure • Encrypted</span>
+                <span class="hero-pill">Support 24/7</span>
+            </div>
+        </section>
+
+        <main>
+            <div class="page-grid auth-grid">
+                <!-- Trending Products Card -->
+                <div class="surface-card auth-products">
+                    <div class="auth-products-header">
+                        <p class="eyebrow">Trending now</p>
+                        <h3>Best seller</h3>
+                        <p class="showcase-subtitle">Sneak a peek at what other shoppers are checking out before you
+                            head in.</p>
+                    </div>
+                    <div class="mini-product-grid">
+                        <article class="mini-product">
+                            <img src="https://2blissofbaking.com/wp-content/uploads/2020/01/DSC_2334-1-1.jpg"
+                                alt="Headphones">
+                            <div>
+                                <h4>Special Aalu Pyaaz Kulcha</h4>
+                                <span class="mini-product-price">₹50</span>
+                                <p>Good things Takes Time 4.8★</p>
+                            </div>
+                        </article>
+                        <article class="mini-product">
+                            <img src="https://shwetainthekitchen.com/wp-content/uploads/2023/03/chinese-vegetable-noodles.jpg"
+                                alt="Smart Watch">
+                            <div>
+                                <h4>VEG NOODLES</h4>
+                                <span class="mini-product-price">₹70</span>
+                                <p>Taste IT Enjoy IT</p>
+                            </div>
+                        </article>
+                        <article class="mini-product">
+                            <img src="https://test.foodsfactory.co.in/Fastfood/upload/images/9917-2021-10-06.png"
+                                alt="Sunglasses">
+                            <div>
+                                <h4>BURGER + FRIES + SOFT DRINK</h4>
+                                <span class="mini-product-price">₹110</span>
+                                <p>Good Taste Is Only Here</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <a href="/maal.html" class="primary-btn auth-products-link"
+                        style="margin-top: var(--spacing-lg);">Browse All Products</a>
+                </div>
+                <!-- Login/Register Card -->
+                <div class="surface-card form-card auth-card">
+                    <div class="auth-header">
+                        <h2>🔐 Taste Juction Access</h2>
+                        <p><b>Sign in with google to proceed</b></p>
+                    </div>
+
+                    <!-- Tab Buttons -->
+
+
+                    <!-- Login Tab -->
+                    <div id="loginTab" class="tab-content active">
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label for="loginEmail">Email</label>
+                                <input type="email" id="loginEmail" name="email" required autocomplete="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" name="password" required minlength="6"
+                                    autocomplete="current-password">
+                            </div>
+                            <button type="submit" class="primary-btn auth-submit">Login</button>
+
+                            <div class="divider"
+                                style="display: flex; align-items: center; text-align: center; margin: 1.5rem 0; color: var(--text-secondary);">
+                                <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+                                <span style="padding: 0 10px; font-size: 0.9rem;">OR</span>
+                                <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+                            </div>
+
+                            <button type="button" onclick="handleGoogleLogin()" class="google-btn"
+                                style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: white; color: #333; border: 1px solid #ddd; padding: 0.75rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                    alt="Google" style="width: 18px; height: 18px;">
+                                <strong>
+                                    <h2>Sign in with Google</h2><strong>
+                            </button>
+
+                            <div id="loginErrorMessage" class="error-message"></div>
+                        </form>
+                    </div>
+
+
+
+                </div>
+        </main>
+    </header>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2025 TASTE JUNCTION. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="user-auth.js"></script>
+
+    <script>
+        function switchTab(tabName) {
+            const targetTab = tabName === 'register' ? 'register' : 'login';
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === targetTab);
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${targetTab}Tab`);
+            });
+            document.getElementById('loginErrorMessage').style.display = 'none';
+            document.getElementById('registerErrorMessage').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const initialTab = params.get('tab');
+            const message = params.get('message');
+
+            if (initialTab === 'register') {
+                switchTab('register');
+            }
+
+            if (message === 'login_to_view_cart') {
+                const errorDiv = document.getElementById('loginErrorMessage');
+                if (errorDiv) {
+                    errorDiv.textContent = 'Please login to view your bag.';
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.color = 'var(--primary-color)';
+                    errorDiv.style.backgroundColor = 'rgba(31, 111, 178, 0.1)';
+                    errorDiv.style.borderColor = 'var(--primary-color)';
+                }
+            }
+        });
+
+        // Modal functions for Password Reset
+        function showResetPasswordModal() {
+            document.getElementById('resetPasswordModal').style.display = 'flex';
+        }
+
+        function hideResetPasswordModal() {
+            document.getElementById('resetPasswordModal').style.display = 'none';
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('resetMessage').style.display = 'none';
+        }
+    </script>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal-overlay">
+        <div class="modal-content">
+            <button onclick="hideResetPasswordModal()" class="modal-close-btn">×</button>
+            <h3 class="modal-title">Reset Password</h3>
+            <p class="modal-description">Enter your email address and we'll send you a link to reset your password.
+            </p>
+            <form onsubmit="handlePasswordReset(event)">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address</label>
+                    <input type="email" id="resetEmail" class="modal-input" required placeholder="name@example.com">
+                </div>
+                <button type="submit" class="primary-btn modal-submit-btn">Send Reset Link</button>
+                <div id="resetMessage" class="modal-message"></div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

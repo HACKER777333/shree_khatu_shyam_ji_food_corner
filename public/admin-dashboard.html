@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TASTE JUNCTION</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+
+<body>
+    <header class="admin-header">
+        <div class="header-content">
+            <h1>⚡ TASTE JUNCTION Admin</h1>
+            <div class="header-actions">
+                <a href="index.html" class="btn-secondary" target="_blank">View Store</a>
+                <button onclick="adminLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- Main Dashboard View -->
+        <section id="main-dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3 id="totalOrders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <h3 id="pendingOrders">0</h3>
+                        <p>Pending Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3 id="completedOrders">0</h3>
+                        <p>Completed Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="totalRevenue">₹0.00</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-section">
+                <div class="nav-buttons-container">
+                    <button onclick="showProductsManagement()" class="nav-btn products-nav">
+                        <span class="nav-icon">🛍️</span>
+                        <span class="nav-text">Manage Products</span>
+                    </button>
+                    <button onclick="showOrdersManagement()" class="nav-btn orders-nav">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">Manage Orders</span>
+                    </button>
+                    <button onclick="showCouponsManagement()" class="nav-btn"
+                        style="background: linear-gradient(135deg, #FFC107, #FF9800);">
+                        <span class="nav-icon">🎟️</span>
+                        <span class="nav-text">Manage Coupons</span>
+                    </button>
+                    <button onclick="showSettingsManagement()" class="nav-btn"
+                        style="background: linear-gradient(135deg, #607d8b, #455a64);">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">Settings</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section (Hidden by default) -->
+        <section id="products-section" class="products-section" style="display: none;">
+            <div class="products-header">
+                <div>
+                    <h2>Product Management</h2>
+                    <p>Maintain storefront inventory, pricing, and stock levels.</p>
+                </div>
+                <button onclick="showMainDashboard()" class="btn-back-to-dashboard">← Back to Dashboard</button>
+            </div>
+            <div class="products-header">
+                <div class="product-actions">
+                    <button onclick="refreshProducts()" class="btn-refresh">🔄 Refresh Products</button>
+                    <button onclick="openProductModal()" class="btn-primary">＋ Add Product</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Rating</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Orders Section (Hidden by default) -->
+        <section id="orders-section" class="orders-section" style="display: none;">
+            <div class="section-header">
+                <div>
+                    <h2>Orders Management</h2>
+                    <p>Track and manage customer orders.</p>
+                </div>
+                <button onclick="showMainDashboard()" class="btn-back-to-dashboard">← Back to Dashboard</button>
+            </div>
+
+            <!-- Filters -->
+            <div id="filters-section" class="filters-section" style="margin-bottom: 20px;">
+                <div class="filters">
+                    <select id="statusFilter" onchange="filterOrders()">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="Search by Order #, Name, or Email"
+                        onkeyup="filterOrders()">
+                    <button onclick="refreshOrders()" class="btn-refresh">🔄 Refresh</button>
+                    <button onclick="resetSales()" class="btn-reset" style="margin-left: auto;">⚠️ Reset Sales</button>
+                </div>
+            </div>
+
+            <!-- Stats for Orders Page -->
+            <div id="stats-section" style="display:none;"></div>
+
+            <div class="table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Items</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="products-section" style="display: none;">
+            <div class="section-header">
+                <h2>Settings</h2>
+                <button onclick="showMainDashboard()" class="btn-back-to-dashboard">← Back to Dashboard</button>
+            </div>
+            <div class="form-grid" style="max-width: 500px;">
+                <div class="form-group">
+                    <label for="shippingRate">Shipping Rate (₹ per km)</label>
+                    <input type="number" id="shippingRate" min="0" step="0.1">
+                </div>
+                <button onclick="saveShippingSettings()" class="btn-primary">Save Settings</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Order Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="close-modal" onclick="closeOrderModal()">×</button>
+            </div>
+            <div class="modal-body" id="orderDetails">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">Add Product</h2>
+                <button class="close-modal" onclick="closeProductModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" id="productName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Category</label>
+                            <input type="text" id="productCategory" placeholder="e.g., Electronics">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Price (₹)</label>
+                            <input type="number" id="productPrice" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productStock">Stock</label>
+                            <input type="number" id="productStock" min="0" step="1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="productRating">Rating (0-5)</label>
+                            <input type="number" id="productRating" min="0" max="5" step="0.1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="productReviews">Reviews Count</label>
+                            <input type="number" id="productReviews" min="0" step="1" value="0">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="productImage">Cover Image URL</label>
+                            <input type="url" id="productImage" placeholder="https://...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="productImageGallery">Additional Image URLs <small>(one per
+                                    line)</small></label>
+                            <textarea id="productImageGallery" rows="3"
+                                placeholder="https://image-2.jpg&#10;https://image-3.jpg"></textarea>
+                            <small style="color: #6c757d; display: block; margin-top: 6px;">First image becomes the
+                                cover photo if cover image is empty.</small>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription" rows="3"
+                                placeholder="Short product description"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancel</button>
+                        <button type="submit" class="btn-primary" id="productSubmitBtn">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="admin-auth.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+
+</html>

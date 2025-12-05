@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - TASTE JUNCTION</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tracking-styles.css">
+    <script src="user-auth.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/home" style="text-decoration: none; color: inherit;">
+                    <h1>TASTE JUNCTION</h1>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="/home" class="admin-link" title="Home">🏠 Home</a>
+                <a href="/maal.html" class="admin-link" title="Products">🛍️ Food Iteams</a>
+                <div class="cart-icon" onclick="window.location.href='cart.html'" title="View Cart"
+                    style="cursor: pointer;">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <button onclick="goBack()" class="back-btn" title="Go Back">← Back</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="tracking-main">
+        <div class="tracking-container">
+            <div class="tracking-header">
+                <h1>📦 Track Your Orders</h1>
+                <p id="trackingSubtitle">Enter your order number to view order status and details</p>
+            </div>
+
+            <!-- User Orders Section (if logged in) -->
+            <div id="userOrdersSection" style="display: none;">
+                <h2 style="margin-bottom: 20px; color: var(--amazon-text);">Your Orders</h2>
+                <div id="userOrdersList">
+                    <!-- User orders will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <div class="tracking-search">
+                <form id="trackingForm" onsubmit="trackOrder(event)">
+                    <div class="search-input-group">
+                        <input type="text" id="orderNumberInput"
+                            placeholder="Enter Order Number (e.g., ORD-1234567890-ABC123)" required autocomplete="off">
+                        <button type="submit" class="track-btn">Track Order</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading order details...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <div class="error-icon">❌</div>
+                <h3>Order Not Found</h3>
+                <p id="errorMessage">The order number you entered could not be found. Please check and try again.</p>
+            </div>
+
+            <!-- Order Details -->
+            <div id="orderDetails" class="order-details-container" style="display: none;">
+                <!-- Order Status Card -->
+                <div class="order-status-card">
+                    <div class="status-header">
+                        <h2>Order #<span id="orderNumberDisplay"></span></h2>
+                        <div class="status-badge-large" id="statusBadge"></div>
+                    </div>
+                    <div class="order-date">
+                        <strong>Order Date:</strong> <span id="orderDate"></span>
+                    </div>
+                </div>
+
+                <!-- Status Timeline -->
+                <div class="status-timeline">
+                    <h3>Order Status Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item" id="timeline-pending">
+                            <div class="timeline-icon">📝</div>
+                            <div class="timeline-content">
+                                <h4>Order Placed</h4>
+                                <p>Your order has been received</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item" id="timeline-processing">
+                            <div class="timeline-icon">⚙️</div>
+                            <div class="timeline-content">
+                                <h4>Processing</h4>
+                                <p>Your order is being prepared</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item" id="timeline-shipped">
+                            <div class="timeline-icon">🚚</div>
+                            <div class="timeline-content">
+                                <h4>On the way</h4>
+                                <p>Your order is on the way</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item" id="timeline-delivered">
+                            <div class="timeline-icon">✅</div>
+                            <div class="timeline-content">
+                                <h4>Delivered</h4>
+                                <p>Your order has been delivered</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Information -->
+                <div class="order-info-grid">
+                    <!-- Customer Information -->
+                    <div class="info-card">
+                        <h3>👤 Customer Information</h3>
+                        <div class="info-item">
+                            <strong style="color: black;">Name:</strong> <span id="customerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong style="color: black;">Email:</strong> <span id="customerEmail"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong style="color: black;">Phone:</strong> <span id="customerPhone"></span>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="info-card">
+                        <h3>🚚 Shipping Address</h3>
+                        <div class="info-item">
+                            <span id="shippingAddress"></span>
+                        </div>
+                        <div class="info-item">
+                            <span id="shippingCity"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-items-card">
+                    <h3>📦 Order Items</h3>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="color: rgb(0, 0, 0);">Item</th>
+                                <th style="color: black;">Quantity</th>
+                                <th style="color: black;">Price</th>
+                                <th style="color: black;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderItemsTable">
+                            <!-- Items will be loaded here -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" color="black"><strong>Total Amount:</strong></td>
+                                <td><strong id="totalAmount">₹0.00</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Actions -->
+                <div class="tracking-actions">
+                    <button onclick="trackAnotherOrder()" class="btn-secondary">Track Another Order</button>
+                    <!DOCTYPE html>
+                    <html lang="en">
+
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Track Your Order - TASTE JUNCTION</title>
+                        <link rel="stylesheet" href="styles.css">
+                        <link rel="stylesheet" href="tracking-styles.css">
+                        <script src="user-auth.js"></script>
+                    </head>
+
+                    <body>
+                        <!-- Header -->
+                        <header class="header">
+                            <div class="header-container">
+                                <div class="logo">
+                                    <a href="/home" style="text-decoration: none; color: inherit;">
+                                        <h1>TASTE JUNCTION</h1>
+                                    </a>
+                                </div>
+                                <div class="header-right">
+                                    <a href="/home" class="admin-link" title="Home">🏠 Home</a>
+                                    <a href="/maal.html" class="admin-link" title="Products">🛍️ Food Iteams</a>
+                                    <div class="cart-icon" onclick="window.location.href='cart.html'" title="View Cart"
+                                        style="cursor: pointer;">
+                                        🛒
+                                        <span class="cart-count" id="cartCount">0</span>
+                                    </div>
+                                    <button onclick="goBack()" class="back-btn" title="Go Back">← Back</button>
+                                </div>
+                            </div>
+                        </header>
+
+                        <!-- Main Content -->
+                        <main class="tracking-main">
+                            <div class="tracking-container">
+                                <div class="tracking-header">
+                                    <h1>📦 Track Your Orders</h1>
+                                    <p id="trackingSubtitle">Enter your order number to view order status and details
+                                    </p>
+                                </div>
+
+                                <!-- User Orders Section (if logged in) -->
+                                <div id="userOrdersSection" style="display: none;">
+                                    <h2 style="margin-bottom: 20px; color: var(--amazon-text);">Your Orders</h2>
+                                    <div id="userOrdersList">
+                                        <!-- User orders will be loaded here -->
+                                    </div>
+                                </div>
+
+                                <!-- Search Form -->
+                                <div class="tracking-search">
+                                    <form id="trackingForm" onsubmit="trackOrder(event)">
+                                        <div class="search-input-group">
+                                            <input type="text" id="orderNumberInput"
+                                                placeholder="Enter Order Number (e.g., ORD-1234567890-ABC123)" required
+                                                autocomplete="off">
+                                            <button type="submit" class="track-btn">Track Order</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Loading State -->
+                                <div id="loadingState" class="loading-state" style="display: none;">
+                                    <div class="spinner"></div>
+                                    <p>Loading order details...</p>
+                                </div>
+
+                                <!-- Error State -->
+                                <div id="errorState" class="error-state" style="display: none;">
+                                    <div class="error-icon">❌</div>
+                                    <h3>Order Not Found</h3>
+                                    <p id="errorMessage">The order number you entered could not be found. Please check
+                                        and try again.</p>
+                                </div>
+
+                                <!-- Order Details -->
+                                <div id="orderDetails" class="order-details-container" style="display: none;">
+                                    <!-- Order Status Card -->
+                                    <div class="order-status-card">
+                                        <div class="status-header">
+                                            <h2>Order #<span id="orderNumberDisplay"></span></h2>
+                                            <div class="status-badge-large" id="statusBadge"></div>
+                                        </div>
+                                        <div class="order-date">
+                                            <strong>Order Date:</strong> <span id="orderDate"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status Timeline -->
+                                    <div class="status-timeline">
+                                        <h3>Order Status Timeline</h3>
+                                        <div class="timeline">
+                                            <div class="timeline-item" id="timeline-pending">
+                                                <div class="timeline-icon">📝</div>
+                                                <div class="timeline-content">
+                                                    <h4>Order Placed</h4>
+                                                    <p>Your order has been received</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item" id="timeline-processing">
+                                                <div class="timeline-icon">⚙️</div>
+                                                <div class="timeline-content">
+                                                    <h4>Processing</h4>
+                                                    <p>Your order is being prepared</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item" id="timeline-shipped">
+                                                <div class="timeline-icon">🚚</div>
+                                                <div class="timeline-content">
+                                                    <h4>On the way</h4>
+                                                    <p>Your order is on the way</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item" id="timeline-delivered">
+                                                <div class="timeline-icon">✅</div>
+                                                <div class="timeline-content">
+                                                    <h4>Delivered</h4>
+                                                    <p>Your order has been delivered</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Order Information -->
+                                    <div class="order-info-grid">
+                                        <!-- Customer Information -->
+                                        <div class="info-card">
+                                            <h3>👤 Customer Information</h3>
+                                            <div class="info-item">
+                                                <strong style="color: black;">Name:</strong> <span
+                                                    id="customerName"></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong style="color: black;">Email:</strong> <span
+                                                    id="customerEmail"></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong style="color: black;">Phone:</strong> <span
+                                                    id="customerPhone"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Shipping Address -->
+                                        <div class="info-card">
+                                            <h3>🚚 Shipping Address</h3>
+                                            <div class="info-item">
+                                                <span id="shippingAddress"></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span id="shippingCity"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Order Items -->
+                                    <div class="order-items-card">
+                                        <h3>📦 Order Items</h3>
+                                        <table class="items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="color: rgb(0, 0, 0);">Item</th>
+                                                    <th style="color: black;">Quantity</th>
+                                                    <th style="color: black;">Price</th>
+                                                    <th style="color: black;">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orderItemsTable">
+                                                <!-- Items will be loaded here -->
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" color="black"><strong>Total Amount:</strong></td>
+                                                    <td><strong id="totalAmount">₹0.00</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="tracking-actions">
+                                        <button onclick="trackAnotherOrder()" class="btn-secondary">Track Another
+                                            Order</button>
+                                        <a href="/home" class="btn-primary">Continue Shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+
+                        <!-- Footer -->
+                        <footer class="footer">
+                            <div class="footer-container">
+                                <p>&reg; 2025 TASTE JUNCTION. All rights reserved.</p>
+                                <div class="footer-contact">
+                                    <p>📞 Contact Us: 6280207979 | 9463600382</p>
+                                </div>
+                            </div>
+                        </footer>
+
+                        <script src="order-tracking.js"></script>
+                    </body>
+
+                    </html>

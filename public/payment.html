@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - TASTE JUNCTION</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase Client SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="user-auth.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="maal.html" style="text-decoration: none; color: inherit;">
+                    <h1>TASTE JUNCTION</h1>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="maal.html" class="nav-link">🏠 Home</a>
+                <a href="cart.html" class="nav-link">🛒 Cart</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero hero--sub">
+            <div class="hero-text">
+                <p class="page-eyebrow">Step 2</p>
+                <h1>Confirm & Pay</h1>
+                <p class="page-subtitle">Scan, pay, and submit your order with confidence. We'll notify the team as soon
+                    as payment is confirmed.</p>
+            </div>
+            <div class="hero-actions">
+                <span class="hero-pill">Instant notifications</span>
+                <span class="hero-pill">Manual verification</span>
+            </div>
+        </section>
+
+        <div class="payment-grid" id="paymentContent">
+            <div class="payment-card surface-card">
+                <h2>Payment Details</h2>
+                <div class="shipping-summary" id="shippingSummary"></div>
+                <div class="order-summary" id="paymentOrderSummary"></div>
+            </div>
+            <div class="payment-card surface-card upi-section">
+                <h2>Pay via UPI</h2>
+                <p>Scan the QR code using any UPI app or click the button below.</p>
+                <div id="qrCodeContainer" style="margin: 20px 0;">
+                    <p>Loading QR Code...</p>
+                </div>
+                <div class="payment-actions">
+                    <button class="btn-confirm" id="paymentConfirmedBtn">✓ I Have Paid</button>
+                    <button class="btn-place-order" id="placeOrderBtn" disabled>Place Order</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-card surface-card success-state" id="paymentSuccessState" style="display:none;">
+            <h2>🎉 Order Placed Successfully!</h2>
+            <p>Your order number is <strong id="successOrderNumber"></strong></p>
+            <div class="success-actions">
+                <a href="order-tracking.html" class="primary-btn">Track Orders</a>
+                <a href="maal.html" class="secondary-btn">Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <div class="loading-modal" id="paymentLoadingModal">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Processing Your Order...</h2>
+            <p class="loading-status" id="paymentLoadingStatus">
+                Preparing your payment details...
+            </p>
+            <p class="loading-subtext">Please wait, this usually takes a few seconds.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&reg; 2025 TASTE JUNCTION. All rights reserved.</p>
+            <div class="footer-contact">
+                <p>📞 Contact Us: 6280207979 | 9463600382</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="payment.js"></script>
+</body>
+
+</html>

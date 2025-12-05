@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Management - Admin</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+
+<body>
+    <header class="admin-header">
+        <div class="header-content">
+            <h1>🎟️ Coupon Management</h1>
+            <div class="header-actions">
+                <a href="admin-dashboard.html" class="btn-secondary">← Back to Dashboard</a>
+                <button onclick="adminLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <section class="coupons-section">
+            <div class="section-header">
+                <h2>Manage Discount Coupons</h2>
+                <button onclick="openCouponModal()" class="btn-primary">＋ Add Coupon</button>
+            </div>
+
+            <div class="table-container">
+                <table class="coupons-table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Type</th>
+                            <th>Discount</th>
+                            <th>Min Order</th>
+                            <th>Usage</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="couponsTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Loading coupons...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Coupon Modal -->
+    <div class="modal" id="couponModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="couponModalTitle">Add Coupon</h2>
+                <button class="close-modal" onclick="closeCouponModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="couponForm">
+                    <input type="hidden" id="couponId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="couponCode">Coupon Code *</label>
+                            <input type="text" id="couponCode" required placeholder="e.g., SAVE20"
+                                style="text-transform: uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label for="discountType">Discount Type *</label>
+                            <select id="discountType" required>
+                                <option value="percentage">Percentage (%)</option>
+                                <option value="fixed">Fixed Amount (₹)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="discountValue">Discount Value *</label>
+                            <input type="number" id="discountValue" min="0" step="0.01" required placeholder="e.g., 20">
+                        </div>
+                        <div class="form-group">
+                            <label for="minOrderValue">Min Order Value (₹)</label>
+                            <input type="number" id="minOrderValue" min="0" step="0.01" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxDiscount">Max Discount (₹)</label>
+                            <input type="number" id="maxDiscount" min="0" step="0.01" placeholder="Optional">
+                        </div>
+                        <div class="form-group">
+                            <label for="usageLimit">Usage Limit</label>
+                            <input type="number" id="usageLimit" min="1" step="1" placeholder="Unlimited">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="date" id="expiryDate">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCouponModal()">Cancel</button>
+                        <button type="submit" class="btn-primary" id="couponSubmitBtn">Save Coupon</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="admin-auth.js"></script>
+    <script src="admin-coupons.js"></script>
+</body>
+
+</html>

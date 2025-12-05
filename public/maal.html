@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Food Iteams - TASTE JUNCTION</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase Client SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-client-config.js"></script>
+    <script src="user-auth.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/maal.html" style="text-decoration: none; color: inherit;">
+                    <h1>TASTE JUNCTION</h1>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="home" class="nav-link">🏠 Home</a>
+                <a href="/maal.html" class="nav-link">Food Iteams</a>
+                <button class="cart-icon" onclick="window.location.href='/cart.html'" title="View Cart">
+                    🛒
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
+                <span id="userInfo" style="display: none;"></span>
+                <button id="logoutBtn" onclick="userLogout()" style="display: none;" class="logout-btn">Logout</button>
+                <a href="login.html" id="loginLink" class="admin-link" title="Login">🔑 Login</a>
+                <a href="login.html?tab=register" id="signupLink" class="admin-link" title="Sign Up">📝 Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Category pills -->
+        <section class="category-pills">
+            <!-- Pills will be generated dynamically -->
+            <button class="category-pill active" onclick="showAllProducts()">All</button>
+        </section>
+
+        <!-- Products Grid -->
+        <section class="products-section" id="productsSection">
+            <h2 class="section-title">All Food Iteams</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Product Preview Modal -->
+        <div class="product-preview-overlay" id="productPreviewOverlay"></div>
+        <div class="product-preview-modal" id="productPreviewModal">
+            <div class="product-preview-content">
+                <button class="preview-close" id="productPreviewClose" aria-label="Close preview">×</button>
+                <div class="product-preview-body">
+                    <div class="preview-gallery">
+                        <button class="preview-nav" id="productPreviewPrev" aria-label="Previous image">‹</button>
+                        <img id="productPreviewImage" src="https://via.placeholder.com/600" alt="Product preview">
+                        <button class="preview-nav" id="productPreviewNext" aria-label="Next image">›</button>
+                        <div class="preview-position" id="productPreviewPosition">1/1</div>
+                    </div>
+                    <div class="preview-info">
+                        <h2 id="productPreviewName">Product Name</h2>
+                        <p class="preview-price" id="productPreviewPrice">₹0.00</p>
+                        <p class="preview-meta" id="productPreviewMeta">0 ★ • 0 reviews</p>
+                        <p class="preview-description" id="productPreviewDescription">Description</p>
+                        <button class="add-to-cart-btn" id="productPreviewAddBtn">Add to bag</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&reg; 2025 TASTE JUNCTION. All rights reserved.</p>
+            <p>Contact: 6280207979 | 9463600382</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
