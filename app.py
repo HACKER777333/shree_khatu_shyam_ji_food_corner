@@ -53,6 +53,14 @@ firestore_client = firestore.client()
 app = Flask(__name__, static_folder='public')
 CORS(app)
 
+# Initialize database on app creation
+with app.app_context():
+    try:
+        init_db()
+        print("[INFO] Database initialized on app startup")
+    except Exception as e:
+        print(f"[WARNING] Database initialization issue: {e}")
+
 @app.route('/admin-coupons.html')
 def admin_coupons_page():
     return send_from_directory('public', 'admin-coupons.html')
@@ -1013,8 +1021,17 @@ def generate_qrcode():
 
 @app.route('/api/orders', methods=['POST'])
 def create_order():
-    data = request.json
+    data = request.json or {}    
+        
+    # Validate required fields
+    required_fields = ['customer_name', 'customer_email', 'shipping_address', 'city', 'state', 'zip_code', 'total_amount', 'items']
+    missing_fields = [f for f in required_fields if not data.get(f)]
+    if missing_fields:
+        return jsonify({'success': False, 'message': f'Missing required fields: {", ".join(missing_fields)}'}), 400
     
+    # Validate items is a list
+    if not isinstance(data.get('items'), list) or not data['items']:
+        return jsonify({'success': False, 'message': 'Items must be a non-empty list'}), 400
     # Generate order number
     order_number = f"ORD-{int(datetime.now().timestamp() * 1000)}-{''.join(random.choices(string.ascii_uppercase + string.digits, k=9))}"
     
@@ -1765,6 +1782,7 @@ def update_shipping_rate():
     return jsonify({'success': True, 'message': 'Shipping rate updated', 'rate': rate_val})
 
 if __name__ == '__main__':
+        init_db()
     print("Starting Flask server...")
     print(f"E-commerce website running on {PUBLIC_APP_URL or 'http://localhost:5000'}")
     app.run(debug=True, port=5000)
